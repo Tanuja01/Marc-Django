@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<style>
+.error{
+	color:red;
+}
+
+</style>
+
+<form id="product_form" method="post">
+	{% csrf_token %}
+	<div >
+		<label> Product Name</label>
+		<input type="text" name="product_name" class="form-control" required>  
+	</div>
+	<div >
+		<label> Product Price</label>
+		<input type="text" name="product_price" class="form-control" required>
+	</div>
+	<div >
+		<label> Product Quantity</label>
+		<input type="text" name="product_quant" class="form-control" required>
+	</div>
+
+	<input type="submit" class="btn btn-primary">
+</form>
+
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+
+$("#product_form").validate({
+    // Specify validation rules
+    rules: {
+      // The key name on the left side is the name attribute
+      // of an input field. Validation rules are defined
+      // on the right side
+      product_name: "required",
+      product_price: "required",
+      product_quant:"required",
+ 
+    },
+    // Specify validation error messages
+    messages: {
+      product_name: "Please enter your name",
+      product_price: "Please enter your price",
+      product_quant:"Please enter your Quantity",
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+</script>
+{% endblock %}
