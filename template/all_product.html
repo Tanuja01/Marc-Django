@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<table class="table">
+	<thead>
+		<tr>
+			<td> Name</td>
+			<td> Quantity</td>
+			<td> Price</td>
+			<td> Edit</td>
+			<td>Delete</td>
+			<td> Add Order</td>
+		</tr>
+
+	</thead>
+
+	<tbody>
+		{% for i in products %}
+			<td>{{i.product_name}}</td>
+			<td>{{i.price}}</td>
+			<td>{{i.quantity}}</td>
+			<td></td>
+			<td></td>
+			<td><a href="{% url 'add_order_view' %}?id={{i.id}}">Add Order</td>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
+

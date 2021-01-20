@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block body %}
+Product Name : {{product.product_name}}<br>
+Price: {{product.price}}<br>
+Quantity: {{product.quantity}}<br>
+
+<form method="post" id="ord_form">
+	{% csrf_token %}
+	<label>Add Purchase Quantity</label>
+	<!--<input type="hidden" id="avail_quant" value="{{product.quantity}}">-->
+	<input type="hidden" id="prod_id" value="{{product.id}}" name="prod_id">
+	<input type="number" name="purchase_quant" id="purchase_quant">
+
+	<button class="btn btn-primary" type="button" id="ord_submit"> Submit</button>
+
+</form>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+	$(document).ready(function(){
+		
+		/* Client Side Code 
+		$('#ord_submit').click(function(){
+			//var avail_quant = $('#avail_quant').val()
+			
+			var avail_quant = parseInt({{product.quantity}})
+			var input_quant = parseInt($('#purchase_quant').val());
+			if (input_quant>avail_quant){
+				Swal.fire('Quantity cannot be greater than '+avail_quant);
+			}
+			return false;
+		})*/
+
+		/*SErver Side AJAX Example */
+		$('#ord_submit').click(function(){
+			
+			$.ajax({
+				url:'/check/quant/',
+				method:'POST',
+				data:{
+					'input_quant':parseInt($('#purchase_quant').val()),
+					'produc_id':$('#prod_id').val() //product id that we are purchasing which is hidden
+				},
+				success:function(resp){ //receive data send back by server
+					if(resp.status == 'success'){
+						$('#ord_form').submit()
+					}
+					else{
+						Swal.fire('Quantity cannot be greater than '+$('#purchase_quant').val());
+						
+					}
+				}
+			})
+			
+		});
+	})
+
+</script> 
+
+
+{% endblock %}
+
