@@ -8,6 +8,8 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-	product = models.ForeignKey(Product,null=True,on_delete = models.SET_NULL,related_name ='product') #models.CASCADE , models.SET_NULL
+	product = models.ForeignKey(Product,null=True,on_delete = models.SET_NULL,related_name ='product_related') #models.CASCADE , models.SET_NULL
 	order_date = models.DateTimeField(auto_now = True)
 	quantity_purchased = models.IntegerField()
+
+

@@ -15,6 +15,26 @@ Quantity: {{product.quantity}}<br>
 	<button class="btn btn-primary" type="button" id="ord_submit"> Submit</button>
 
 </form>
+<table class="table">
+	<thead>	
+		<tr>
+			<td>Order Date</td>
+			<td> Quantity Purchased</td>
+		</tr>
+
+	</thead>
+	<tbody>
+		{% for ord in product.product_related.all %}
+			<tr>
+				<td>{{ord.order_date}}</td>
+				<td>{{ord.quantity_purchased}}</td>
+
+			</tr>
+
+		{% endfor %}
+
+	</tbody>
+</table>
 
 {% endblock %}
 

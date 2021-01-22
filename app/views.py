@@ -86,3 +86,18 @@ def check_quant(request):
 
 	else:
 		return JsonResponse({'status':'success'})
+
+
+@csrf_exempt
+def edit_product(request):
+	name =request.POST.get('name')
+	quant =request.POST.get('quant')
+	price =request.POST.get('price')
+	edit_id =request.POST.get('edit_id')
+
+	Product.objects.filter(id=edit_id).update(
+		price =price,
+		quantity=quant
+		)
+
+	return JsonResponse({'status':'success'})

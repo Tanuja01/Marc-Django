@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+
+
+
+
+
 <table class="table">
 	<thead>
 		<tr>
@@ -16,14 +22,107 @@
 
 	<tbody>
 		{% for i in products %}
-			<td>{{i.product_name}}</td>
-			<td>{{i.price}}</td>
-			<td>{{i.quantity}}</td>
+		<tr>
+			<td class="{{i.id}}">{{i.product_name}}</td>
+			<td class="{{i.id}}">{{i.price}}</td>
+			<td class="{{i.id}}">{{i.quantity}}</td>
+			<td>
+				<button type="button" class="btn btn-primary pro_edit" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" id="{{i.id}}">Edit</button></td>
 			<td></td>
-			<td></td>
-			<td><a href="{% url 'add_order_view' %}?id={{i.id}}">Add Order</td>
+			<td><a href="{% url 'add_order_view' %}?id={{i.id}}">Add Order</a></td>
+		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+          	 <input type="hidden" class="form-control" id="edit_id" name="edit_id" >
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="pro_name" readonly="">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Quantity:</label>
+            <textarea class="form-control" id="quant" name="quant"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Price:</label>
+            <textarea class="form-control" name="price" id="price"> </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save_edit">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+	$('.pro_edit').click(function(){
+		prod_id =  $(this).attr('id')
+		
+		arr = [];
+		$('.'+prod_id).each(function(){
+			arr.push($(this).text())
+		})
+
+		$('#name').val(arr[0])
+		$('#quant').val(arr[2])
+		$('#price').val(arr[1])
+		$('#edit_id').val(prod_id)
+
+	})
+
+
+	$('#save_edit').click(function(){
+
+		$.ajax({
+			url:'/edit/product/',
+			method:'post',
+			data:{
+				'name':$('#name').val(),
+				'quant':$('#quant').val(),
+				'price':$('#price').val(),
+				'edit_id':$('#edit_id').val()
+			},
+			success:function(resp){
+				
+				$('.modal').modal('hide');
+				prod_id = $('#edit_id').val()
+				obj = {0:'name',1:'quant',2:'price'}
+				i = 0
+
+				$('.'+prod_id).each(function(){
+					$(this).text($('#'+obj[i]).val())
+					i++
+					
+				})
+
+			}
+		})
+	})
+
+
+</script>
+
 {% endblock %}
 
